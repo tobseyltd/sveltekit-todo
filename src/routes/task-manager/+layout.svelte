@@ -1,3 +1,3 @@
-<div class="box-content flex-wrap h-full overflow-hidden flex-it md:p-20">
+<div class="box-border h-full overflow-hidden md:p-10 flex-it">
 	<slot />
 </div>
