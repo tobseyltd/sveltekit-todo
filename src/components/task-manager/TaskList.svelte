@@ -2,6 +2,7 @@
 	import TaskItem from './TaskItem.svelte';
 
 	export let listTitle: string;
+	export let listIndex: number;
 	export let tasks: any[];
 </script>
 
@@ -34,7 +35,7 @@
 			<!-- TASK ITEM START -->
 
 			{#each tasks as task (task.id)}
-				<TaskItem taskDescription={task.text} />
+				<TaskItem {task} {listIndex}/>
 			{/each}
 
 			<!-- TASK ITEM END -->

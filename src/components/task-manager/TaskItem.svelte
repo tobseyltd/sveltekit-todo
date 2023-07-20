@@ -1,14 +1,30 @@
 <script lang="ts">
 	import Editable from './Editable.svelte';
+	import { taskListStoreData } from '$lib/stores/tasks';
 
-	export let taskDescription: string;
+	export let task: any;
+	export let listIndex: number;
+
+	let taskDescription = task.text;
+
+	function updateTask(event: any): void {
+		taskListStoreData.updateTask(
+			{
+				id: task.id,
+				text: event.detail.editedTaskValue
+			},
+			listIndex
+		);
+	}
 </script>
 
-<Editable>
-	<div class="p-2 mb-2 border border-solid cursor-pointer flex-it rounded-xl bg-slate-500">
-		<div class="flex-it">
+<div
+	class="p-2 mb-2 border border-solid cursor-pointer flex-it rounded-xl bg-slate-500"
+>
+	<div class="flex-it">
+		<Editable bind:textInputValue={taskDescription} on:editedTask={updateTask}>
 			<div class="flex-row flex-it">
-				<div class="flex flex-1">{taskDescription}</div>
+				<div class="flex flex-1">{task.text}</div>
 				<div class="flex items-end hover:text-red-600">
 					<svg
 						xmlns="http://www.w3.org/2000/svg"
@@ -28,6 +44,6 @@
 					</svg>
 				</div>
 			</div>
-		</div>
+		</Editable>
 	</div>
-</Editable>
+</div>
