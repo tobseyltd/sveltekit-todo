@@ -32,12 +32,12 @@ const DATA = [
 
 function createStore() {
 	const taskListData = writable(DATA);
-	const { subscribe } = taskListData;
+	const { subscribe, update } = taskListData;
 
 	return {
 		subscribe,
 		updateTask: (task: any, listIndex: any) => {
-			taskListData.update((storeTaskList) => {
+			update((storeTaskList) => {
 				const taskIndex = storeTaskList[listIndex].items.findIndex(
 					(storeTask) => storeTask.id === task.id
 				);
@@ -47,6 +47,16 @@ function createStore() {
 				}
 				return storeTaskList;
 			});
+		},
+		addList: () => {
+			update((list) => [
+				...list,
+				{
+					id: new Date().toISOString(),
+					text: 'New List',
+					items: []
+				}
+			]);
 		}
 	};
 }
