@@ -31,7 +31,10 @@ const DATA = [
 ];
 
 function createStore() {
-	const taskListData = writable(DATA);
+	const stored = localStorage.getItem('task-data');
+	const storedTaskList = stored ? JSON.parse(stored) : DATA;
+
+	const taskListData = writable(storedTaskList);
 	const { subscribe, update } = taskListData;
 
 	return {

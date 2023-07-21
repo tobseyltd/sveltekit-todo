@@ -1,14 +1,19 @@
 <script context="module" lang="ts">
 	import { writable } from 'svelte/store';
+
 	let listHoverId: any = writable();
 </script>
 
 <script lang="ts">
 	import { taskListStoreData } from '$lib/stores/tasks';
+	import { flip } from 'svelte/animate';
+	import { fade, fly } from 'svelte/transition';
 	import TaskItem from './TaskItem.svelte';
 
 	export let taskList: any;
 	export let listIndex: number;
+
+	// Handlers
 
 	function handleDragEnter() {
 		listHoverId.set(taskList.id);
@@ -24,6 +29,8 @@
 		listHoverId.set('');
 	}
 </script>
+
+<!-- HTML Markup -->
 
 <div class="max-w-sm max-h-full min-h-full m-2 my-0 flex-it w-80">
 	<div
@@ -61,7 +68,13 @@
 			<!-- TASK ITEM START -->
 
 			{#each taskList.items as task, taskIndex (task.id)}
-				<TaskItem {task} {listIndex} {taskIndex} />
+				<div
+					in:fly={{ y: 200, duration: 700 }}
+					out:fade={{ duration: 600 }}
+					animate:flip
+				>
+					<TaskItem {task} {listIndex} {taskIndex} />
+				</div>
 			{/each}
 
 			<!-- TASK ITEM END -->
@@ -74,6 +87,8 @@
 		</button>
 	</div>
 </div>
+
+<!-- Styles -->
 
 <style>
 	.hovering {
