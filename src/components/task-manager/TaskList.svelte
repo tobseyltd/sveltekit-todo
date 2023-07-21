@@ -7,9 +7,9 @@
 	export let tasks: any[];
 </script>
 
-<div class="h-full max-w-sm min-h-full m-2 my-0 flex-it w-80">
+<div class="max-w-sm max-h-full min-h-full m-2 my-0 flex-it w-80">
 	<div class="max-h-full border-2 border-gray-500 bg-slate-400 flex-it rounded-xl">
-		<div class="m-3 flex-it">
+		<div class="m-5 flex-it">
 			<div class="flex-row flex-it">
 				<div class="mr-2 text-xl font-bold text-left">{listTitle}</div>
 				<div class="flex items-center hover:text-red-600">
@@ -32,7 +32,7 @@
 				</div>
 			</div>
 		</div>
-		<div class="p-2 overflow-x-hidden overflow-y-auto with-scrollbar">
+		<div class="p-3 overflow-x-auto overflow-y-auto with-scrollbar">
 			<!-- TASK ITEM START -->
 
 			{#each tasks as task (task.id)}
