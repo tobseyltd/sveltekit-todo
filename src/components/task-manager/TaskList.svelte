@@ -1,11 +1,9 @@
 <script lang="ts">
 	import { taskListStoreData } from '$lib/stores/tasks';
-	import { list } from 'postcss';
 	import TaskItem from './TaskItem.svelte';
 
-	export let listTitle: string;
+	export let taskList: any;
 	export let listIndex: number;
-	export let tasks: any[];
 
 	function handleDrop(event: any): void {
 		const sourceData = JSON.parse(event.dataTransfer.getData('text/plain'));
@@ -26,7 +24,7 @@
 	>
 		<div class="m-5 flex-it">
 			<div class="flex-row flex-it">
-				<div class="mr-2 text-xl font-bold text-left">{listTitle}</div>
+				<div class="mr-2 text-xl font-bold text-left">{taskList.listTitle}</div>
 				<div class="flex items-center hover:text-red-600">
 					<svg
 						xmlns="http://www.w3.org/2000/svg"
@@ -50,7 +48,7 @@
 		<div class="p-3 overflow-x-auto overflow-y-auto with-scrollbar">
 			<!-- TASK ITEM START -->
 
-			{#each tasks as task, taskIndex (task.id)}
+			{#each taskList.items as task, taskIndex (task.id)}
 				<TaskItem {task} {listIndex} {taskIndex} />
 			{/each}
 
