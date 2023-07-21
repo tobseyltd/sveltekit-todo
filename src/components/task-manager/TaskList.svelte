@@ -1,14 +1,29 @@
 <script lang="ts">
 	import { taskListStoreData } from '$lib/stores/tasks';
+	import { list } from 'postcss';
 	import TaskItem from './TaskItem.svelte';
 
 	export let listTitle: string;
 	export let listIndex: number;
 	export let tasks: any[];
+
+	function handleDrop(event: any): void {
+		const sourceData = JSON.parse(event.dataTransfer.getData('text/plain'));
+		taskListStoreData.moveTask(sourceData, listIndex)
+	}
+
+	function handleDragover(event: DragEvent) {
+		event.preventDefault();
+	}
 </script>
 
 <div class="max-w-sm max-h-full min-h-full m-2 my-0 flex-it w-80">
-	<div class="max-h-full border-2 border-gray-500 bg-slate-400 flex-it rounded-xl">
+	<div
+		role="listitem"
+		on:dragover={handleDragover}
+		on:drop={handleDrop}
+		class="max-h-full border-2 border-gray-500 bg-slate-400 flex-it rounded-xl"
+	>
 		<div class="m-5 flex-it">
 			<div class="flex-row flex-it">
 				<div class="mr-2 text-xl font-bold text-left">{listTitle}</div>
@@ -35,8 +50,8 @@
 		<div class="p-3 overflow-x-auto overflow-y-auto with-scrollbar">
 			<!-- TASK ITEM START -->
 
-			{#each tasks as task (task.id)}
-				<TaskItem {task} {listIndex} />
+			{#each tasks as task, taskIndex (task.id)}
+				<TaskItem {task} {listIndex} {taskIndex} />
 			{/each}
 
 			<!-- TASK ITEM END -->

@@ -71,6 +71,17 @@ function createStore() {
 				];
 				return list;
 			});
+		},
+		moveTask: (sourceData: any, moveToListIndex: any) => {
+			update((list) => {
+				const [task] = list[sourceData.listIndex].items.splice(
+					sourceData.taskIndex,
+					1
+				);
+
+				list[moveToListIndex].items.push(task);
+				return list;
+			});
 		}
 	};
 }

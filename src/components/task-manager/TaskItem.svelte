@@ -4,6 +4,7 @@
 
 	export let task: any;
 	export let listIndex: number;
+	export let taskIndex: number;
 
 	let taskDescription = task.text;
 
@@ -16,9 +17,18 @@
 			listIndex
 		);
 	}
+
+	function dragStart(event: any) {
+		const data = { listIndex, taskIndex };
+
+		event.dataTransfer.setData('text/plain', JSON.stringify(data));
+	}
 </script>
 
 <div
+	draggable="true"
+	role="listitem"
+	on:dragstart={dragStart}
 	class="p-2 mb-2 border border-solid cursor-pointer flex-it rounded-xl bg-slate-500"
 >
 	<div class="flex-it">
