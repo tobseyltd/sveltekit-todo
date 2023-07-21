@@ -57,6 +57,20 @@ function createStore() {
 					items: []
 				}
 			]);
+		},
+		addTask: (listIndex: any) => {
+			update((list) => {
+				const { items } = list[listIndex];
+
+				list[listIndex].items = [
+					...items,
+					{
+						id: new Date().toISOString(),
+						text: 'What to do?'
+					}
+				];
+				return list;
+			});
 		}
 	};
 }

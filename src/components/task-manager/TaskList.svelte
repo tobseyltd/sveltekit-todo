@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { taskListStoreData } from '$lib/stores/tasks';
 	import TaskItem from './TaskItem.svelte';
 
 	export let listTitle: string;
@@ -35,11 +36,13 @@
 			<!-- TASK ITEM START -->
 
 			{#each tasks as task (task.id)}
-				<TaskItem {task} {listIndex}/>
+				<TaskItem {task} {listIndex} />
 			{/each}
 
 			<!-- TASK ITEM END -->
 		</div>
-		<button class="flex p-2 underline"> + Add Task </button>
+		<button on:click={() => taskListStoreData.addTask(listIndex)} class="flex p-2 underline">
+			+ Add Task
+		</button>
 	</div>
 </div>
