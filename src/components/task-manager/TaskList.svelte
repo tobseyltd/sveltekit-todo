@@ -1,3 +1,8 @@
+<script context="module" lang="ts">
+	import { writable } from 'svelte/store';
+	let listHoverId: any = writable();
+</script>
+
 <script lang="ts">
 	import { taskListStoreData } from '$lib/stores/tasks';
 	import TaskItem from './TaskItem.svelte';
@@ -5,26 +10,33 @@
 	export let taskList: any;
 	export let listIndex: number;
 
-	function handleDrop(event: any): void {
-		const sourceData = JSON.parse(event.dataTransfer.getData('text/plain'));
-		taskListStoreData.moveTask(sourceData, listIndex)
+	function handleDragEnter() {
+		listHoverId.set(taskList.id);
 	}
 
 	function handleDragover(event: DragEvent) {
 		event.preventDefault();
+	}
+
+	function handleDrop(event: any): void {
+		const sourceData = JSON.parse(event.dataTransfer.getData('text/plain'));
+		taskListStoreData.moveTask(sourceData, listIndex);
+		listHoverId.set('');
 	}
 </script>
 
 <div class="max-w-sm max-h-full min-h-full m-2 my-0 flex-it w-80">
 	<div
 		role="listitem"
+		on:dragenter={handleDragEnter}
 		on:dragover={handleDragover}
 		on:drop={handleDrop}
+		class:hovering={taskList.id === $listHoverId}
 		class="max-h-full border-2 border-gray-500 bg-slate-400 flex-it rounded-xl"
 	>
 		<div class="m-5 flex-it">
 			<div class="flex-row flex-it">
-				<div class="mr-2 text-xl font-bold text-left">{taskList.listTitle}</div>
+				<div class="mr-2 text-xl font-bold text-left">{taskList.text}</div>
 				<div class="flex items-center hover:text-red-600">
 					<svg
 						xmlns="http://www.w3.org/2000/svg"
@@ -62,3 +74,9 @@
 		</button>
 	</div>
 </div>
+
+<style>
+	.hovering {
+		border: 2px solid orange;
+	}
+</style>
