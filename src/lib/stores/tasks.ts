@@ -42,7 +42,7 @@ function createStore() {
 		updateTask: (task: any, listIndex: any) => {
 			update((storeTaskList) => {
 				const taskIndex = storeTaskList[listIndex].items.findIndex(
-					(storeTask) => storeTask.id === task.id
+					(storeTask: any) => storeTask.id === task.id
 				);
 
 				if (taskIndex >= 0) {
@@ -89,3 +89,7 @@ function createStore() {
 	};
 }
 export const taskListStoreData = createStore();
+
+taskListStoreData.subscribe((list) => {
+	list && localStorage.setItem('task-data', JSON.stringify(list));
+});
