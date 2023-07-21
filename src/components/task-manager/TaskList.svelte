@@ -41,7 +41,10 @@
 
 			<!-- TASK ITEM END -->
 		</div>
-		<button on:click={() => taskListStoreData.addTask(listIndex)} class="flex p-2 underline">
+		<button
+			on:click={() => taskListStoreData.addTask(listIndex)}
+			class="flex p-2 underline"
+		>
 			+ Add Task
 		</button>
 	</div>
