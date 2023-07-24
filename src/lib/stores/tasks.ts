@@ -39,6 +39,7 @@ function createStore() {
 
 	return {
 		subscribe,
+
 		updateTask: (task: any, listIndex: any) => {
 			update((storeTaskList) => {
 				const taskIndex = storeTaskList[listIndex].items.findIndex(
@@ -51,6 +52,7 @@ function createStore() {
 				return storeTaskList;
 			});
 		},
+
 		addList: () => {
 			update((list) => [
 				...list,
@@ -61,6 +63,7 @@ function createStore() {
 				}
 			]);
 		},
+
 		addTask: (listIndex: any) => {
 			update((list) => {
 				const { items } = list[listIndex];
@@ -75,6 +78,7 @@ function createStore() {
 				return list;
 			});
 		},
+
 		moveTask: (sourceData: any, moveToListIndex: any) => {
 			update((list) => {
 				const [task] = list[sourceData.listIndex].items.splice(
@@ -83,6 +87,24 @@ function createStore() {
 				);
 
 				list[moveToListIndex].items.push(task);
+				return list;
+			});
+		},
+
+		removeTask: (listIndex: any, taskIndex: any) => {
+			update((list) => {
+				list[listIndex].items.splice(taskIndex, 1);
+				return list;
+			});
+		},
+
+		removeList: (listIndex: any) => {
+			update((list) => list.filter((_: any, idx: any) => idx !== listIndex));
+		},
+
+		updateList: (newText: any, listIndex: any) => {
+			update((list) => {
+				list[listIndex].text = newText;
 				return list;
 			});
 		}

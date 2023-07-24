@@ -1,15 +1,21 @@
 <script lang="ts">
 	import { createEventDispatcher } from 'svelte';
+
 	const dispatch = createEventDispatcher();
 
+	// Props //////////////////////////////////////
 	export let textInputValue: string;
-
+	
+	// Variables //////////////////////////////////
 	let editable: boolean = false;
 
+	// Handler Functions //////////////////////////
 	function handleEditable(): void {
 		editable = !editable;
 	}
 </script>
+
+<!-- HTML MARKUP -->
 
 {#if editable}
 	<div class="flex-it">
@@ -18,10 +24,11 @@
 		<button
 			on:click={() => {
 				handleEditable();
-				dispatch('editedTask', {
-                    editedTaskValue: textInputValue});
+				dispatch('editValue', {
+					editedValue: textInputValue
+				});
 			}}
-			class="flex underline">Save Task</button
+			class="flex underline">Save</button
 		>
 	</div>
 {:else}
@@ -29,6 +36,8 @@
 		<slot />
 	</button>
 {/if}
+
+<!-- STYLING -->
 
 <style>
 	textarea {
