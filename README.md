@@ -1,6 +1,6 @@
 # Svelte Kit To Do App
 
-> LIVE VERSION: https://superb-taffy-55adbf.netlify.app/
+> LIVE VERSION: https://lively-centaur-61b9a7.netlify.app/task-manager
 
 ## Table of contents
 
