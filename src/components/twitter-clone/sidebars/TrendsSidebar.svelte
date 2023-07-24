@@ -1,6 +1,4 @@
 <script lang="ts">
-	import type { PageData } from '../../../routes/task-manager/$types';
-
 	export let trends: any;
 </script>
 
