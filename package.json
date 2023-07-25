@@ -32,6 +32,8 @@
 	},
 	"type": "module",
 	"dependencies": {
-		"svelte-icons": "^2.1.0"
+		"svelte-icons": "^2.1.0",
+		"uuid": "^9.0.0",
+		"uuidv4": "^6.2.13"
 	}
 }
