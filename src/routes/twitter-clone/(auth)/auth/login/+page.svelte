@@ -41,7 +41,9 @@
 			</div>
 			<div class="pb-4 text-sm text-gray-600">
 				No Account Yet?{' '}
-				<a class="hover:underline" href="/"> Create a new account </a>
+				<a class="hover:underline" href="/twitter-clone/auth/register">
+					Create a new account
+				</a>
 			</div>
 			<div class="py-2 flex-it">
 				<button
