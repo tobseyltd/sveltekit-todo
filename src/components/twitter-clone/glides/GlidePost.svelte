@@ -2,7 +2,7 @@
 	import TiHeartOutline from 'svelte-icons/ti/TiHeartOutline.svelte';
 	import TiMessage from 'svelte-icons/ti/TiMessage.svelte';
 	import TiTrash from 'svelte-icons/ti/TiTrash.svelte';
-	import type { GlideProps } from '../../../routes/twitter-clone/+page.svelte';
+	import type { GlideProps } from '../../../routes/twitter-clone/(main)/+page.svelte';
 
 	export let glide: GlideProps;
 </script>

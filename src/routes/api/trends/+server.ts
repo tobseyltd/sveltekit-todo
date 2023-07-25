@@ -1,9 +1,10 @@
 import { json } from '@sveltejs/kit';
+import type { PageData } from '../../$types';
 
 export function GET() {
 	const randomize = (): number => Math.floor(Math.random() * 500);
 
-	const trends = [
+	const trends: PageData = [
 		{
 			category: 'Sports',
 			content: 'Some team won something!',
