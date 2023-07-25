@@ -1,7 +1,11 @@
 <script lang="ts">
 	import TiSocialFlickr from 'svelte-icons/ti/TiSocialFlickr.svelte';
-	import { navLinks } from './navLinks';
+	import TiBrush from 'svelte-icons/ti/TiBrush.svelte';
 	import UserPopup from '@components/utils/UserPopup.svelte';
+	import { navLinks } from './navLinks';
+	import { getUIContext } from '@components/context/UI';
+
+	const { isXl, loading } = getUIContext();
 </script>
 
 <div class="w-20 xl:w-80 flex-it">
@@ -48,7 +52,13 @@
 						<div
 							class="flex-row items-start justify-center text-xl font-bold text-white truncate duration-200 flex-it"
 						>
-							<div>Glide It</div>
+							{#if $loading}
+								<div>...</div>
+							{:else if $isXl}
+								<div>Glide It</div>
+							{:else}
+								<div class="icon"><TiBrush /></div>
+							{/if}
 						</div>
 					</div>
 				</div>
