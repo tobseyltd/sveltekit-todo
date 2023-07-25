@@ -7,7 +7,7 @@ import TiZoomOutline from "svelte-icons/ti/TiZoomOutline.svelte";
 export const navLinks = [
   {
     name: "Home",
-    href: "/",
+    href: "/twitter-clone",
     icon: TiHomeOutline
   },
   {

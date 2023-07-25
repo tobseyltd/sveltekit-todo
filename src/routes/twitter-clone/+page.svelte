@@ -19,8 +19,6 @@
 	import { v4 as uuidv4 } from 'uuid';
 	import GlidePost from '../../components/twitter-clone/glides/GlidePost.svelte';
 
-	
-
 	let glides: GlideProps[] = [];
 	let glideContent = '';
 
