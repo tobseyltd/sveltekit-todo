@@ -55,11 +55,11 @@
         use:clickOutside
         bind:this={popup}
         style="bottom: {popupBottomPosition}; left: {popupLeftPosition}"
-        class="fixed z-10 text-white transition duration-1000 bg-gray-800 border border-gray-700 flex-it hover:cursor-pointer popup rounded-2xl"
+        class="fixed z-10 text-white transition duration-1000 bg-gray-800 border border-gray-700 flex-it hover:cursor-pointer popup rounded-3xl"
       >
-        <div class="overflow-auto w-72 min-w-68 max-h-120 min-h-8 flex-it">
+        <div class="overflow-auto w-72 min-w-68 max-h-120 min-h-6 flex-it">
           <div class="flex-grow flex-shrink py-3 flex-it">
-            <div class="px-4 py-3 transition flex-it hover:bg-gray-700">Logout</div>
+            <div class="px-4 py-3 transition flex-it hover:bg-gray-800">Logout</div>
           </div>
         </div>
       </div>
