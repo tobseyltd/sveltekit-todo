@@ -2,6 +2,7 @@
 	import TiSocialFlickr from 'svelte-icons/ti/TiSocialFlickr.svelte';
 
 	import { navLinks } from './navLinks';
+	import UserPopup from '@components/utils/UserPopup.svelte';
 </script>
 
 <div class="w-20 xl:w-80 flex-it">
@@ -55,31 +56,33 @@
 			</div>
 			<!-- PROFILE MENU -->
 			<div class="my-3 flex-it hover:cursor-pointer">
-				<!-- <UserSettingPopup /> -->
-				<div
-					class="flex-row items-center p-3 transition duration-200 cursor-pointer flex-it rounded-3xl hover:bg-gray-800 hover:rounded-3xl"
-				>
-					<div class="flex-it">
-						<div class="w-10 h-10 overflow-visible">
-							<img
-								alt=""
-								class="rounded-full"
-								src="https://www.pinclipart.com/picdir/middle/133-1331433_free-user-avatar-icons-happy-flat-design-png.png"
-							/>
-						</div>
-					</div>
+				<UserPopup>
+					<!-- <UserSettingPopup /> -->
 					<div
-						class="flex-row items-center justify-between flex-grow hidden flex-it xl:flex"
+						class="flex-row items-center p-3 transition duration-200 cursor-pointer flex-it rounded-3xl hover:bg-gray-800 hover:rounded-3xl"
 					>
-						<div class="mx-3 font-bold flex-it">Filip99</div>
 						<div class="flex-it">
-							<div class="icon">
-								<TiSocialFlickr />
+							<div class="w-10 h-10 overflow-visible">
+								<img
+									alt=""
+									class="rounded-full"
+									src="https://www.pinclipart.com/picdir/middle/133-1331433_free-user-avatar-icons-happy-flat-design-png.png"
+								/>
 							</div>
-							<!-- <FiMoreHorizontal /> -->
+						</div>
+						<div
+							class="flex-row items-center justify-between flex-grow hidden flex-it xl:flex"
+						>
+							<div class="mx-3 font-bold flex-it">Filip99</div>
+							<div class="flex-it">
+								<div class="icon">
+									<TiSocialFlickr />
+								</div>
+								<!-- <FiMoreHorizontal /> -->
+							</div>
 						</div>
 					</div>
-				</div>
+				</UserPopup>
 			</div>
 		</div>
 	</div>
