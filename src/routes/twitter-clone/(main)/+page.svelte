@@ -16,11 +16,14 @@
 
 <script lang="ts">
 	import TiImageOutline from 'svelte-icons/ti/TiImageOutline.svelte';
-	import { v4 as uuidv4 } from 'uuid';
 	import GlidePost from '../../../components/twitter-clone/glides/GlidePost.svelte';
+	import { v4 as uuidv4 } from 'uuid';
+	import { getUIContext } from '@components/context/UI';
 
 	let glides: GlideProps[] = [];
 	let glideContent = '';
+
+	const { isLg, isXL } = getUIContext();
 
 	// Helper Functions ////////////////////////////
 	function createGlide() {
@@ -95,6 +98,8 @@
 	</div>
 	<!-- MESSENGER END -->
 </div>
+isLg: {$isLg}
+isXL: {$isXL}
 <div class="h-px my-1 bg-gray-700" />
 <!-- GLIDE POST START -->
 

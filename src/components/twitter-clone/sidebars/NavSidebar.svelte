@@ -1,6 +1,5 @@
 <script lang="ts">
 	import TiSocialFlickr from 'svelte-icons/ti/TiSocialFlickr.svelte';
-
 	import { navLinks } from './navLinks';
 	import UserPopup from '@components/utils/UserPopup.svelte';
 </script>
