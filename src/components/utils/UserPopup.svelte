@@ -4,7 +4,7 @@
 	import { afterUpdate, onMount } from 'svelte';
 	import UserPopupPortal from './UserPopupPortal.svelte';
 	// @ts-ignore
-	import { clickOutside } from '@components/actions/clickOutside';
+	import { clickOutside } from '$lib/actions/clickOutside';
 
 	let isOpen = false;
 
