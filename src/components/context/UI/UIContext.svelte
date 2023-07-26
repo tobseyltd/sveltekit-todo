@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { onMount, setContext } from 'svelte';
+	import { setContext } from 'svelte';
 	import { writable } from 'svelte/store';
 	import { key } from '.';
 
