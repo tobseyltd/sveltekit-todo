@@ -22,6 +22,7 @@
 	let glides: GlideProps[] = [];
 	let glideContent = '';
 
+
 	// Helper Functions ////////////////////////////
 	function createGlide() {
 		const date = new Date().toISOString;
