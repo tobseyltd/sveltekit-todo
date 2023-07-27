@@ -10,8 +10,13 @@ function logoutUser() {
 	return signOut(firebaseAuth);
 }
 
-function loginUser(form: { email: string; password: string; }) {
-	return signInWithEmailAndPassword(firebaseAuth, form.email, form.password);
+async function loginUser(form: { email: string; password: string }) {
+	const { user } = await signInWithEmailAndPassword(
+		firebaseAuth,
+		form.email,
+		form.password
+	);
+	return user;
 }
 
 async function registerUser(form: any) {
@@ -39,4 +44,8 @@ async function registerUser(form: any) {
 	return registerUser;
 }
 
-export { registerUser, logoutUser, loginUser };
+function authenticate(form: { email: string; password: string }, type: string) {
+	return type === 'login' ? loginUser(form) : registerUser(form);
+}
+
+export { logoutUser, authenticate };

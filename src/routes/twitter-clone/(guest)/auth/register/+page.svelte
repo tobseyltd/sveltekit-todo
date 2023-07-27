@@ -1,16 +1,15 @@
-<script>
+<script lang="ts">
+	import { createAuthStore } from '$lib/stores/createAuthStore';
+
 	// @ts-nocheck
 
-	import { registerUser } from '@api/auth';
 	import AuthLayout from '@components/layouts/AuthLayout.svelte';
 	import RegisterForm from '@components/twitter-clone/forms/RegisterForm.svelte';
 
-	/**
-	 * @param {any} formData
-	 */
-	async function register(formData) {
-		const user = await registerUser(formData);
-		console.log(user);
+	const { authUser } = createAuthStore('register');
+
+	async function register(formData: { email: string; password: string }) {
+		authUser(formData);
 	}
 </script>
 
