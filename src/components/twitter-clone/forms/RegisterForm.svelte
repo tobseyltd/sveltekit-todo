@@ -20,10 +20,6 @@
 	});
 
 	export let onFormSubmit;
-
-	function handleFormSubmit(formData) {
-		alert(JSON.stringify(formData));
-	}
 </script>
 
 <form class="flex-it">

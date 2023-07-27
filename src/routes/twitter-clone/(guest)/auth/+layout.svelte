@@ -4,7 +4,7 @@
 
 	const { auth } = getAuthContext();
 
-	if ($auth) goto('/twitter-clone');
+	if ($auth.isAuthenticated) goto('/twitter-clone');
 </script>
 
 {#if !$auth.isAuthenticated}
