@@ -3,7 +3,7 @@
 	import AuthLayout from '@components/layouts/AuthLayout.svelte';
 	import LoginForm from '@components/twitter-clone/forms/LoginForm.svelte';
 
-	const { authUser } = createAuthStore('login');
+	const { authUser, loading } = createAuthStore('login');
 
 	/**
 	 * @param {{ email: string; password: string; }} formData
@@ -14,5 +14,5 @@
 </script>
 
 <AuthLayout title="Glide it - Login">
-	<LoginForm onFormSubmit={login} />
+	<LoginForm loading={$loading} onFormSubmit={login} />
 </AuthLayout>

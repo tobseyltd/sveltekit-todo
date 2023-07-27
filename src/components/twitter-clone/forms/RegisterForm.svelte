@@ -20,6 +20,7 @@
 	});
 
 	export let onFormSubmit;
+	export let loading;
 </script>
 
 <form class="flex-it">
@@ -137,6 +138,7 @@
 		<div class="py-2 flex-it">
 			<button
 				on:click={submitForm(onFormSubmit)}
+				disabled={loading}
 				type="button"
 				class="inline-flex justify-center px-4 py-2 text-sm font-medium text-white bg-blue-400 border border-transparent rounded-md shadow-sm hover:bg-blue-500 focus:ring-0 disabled:cursor-not-allowed disabled:bg-gray-400 focus:outline-none focus:ring-offset-2"
 			>
