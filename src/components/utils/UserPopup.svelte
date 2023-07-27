@@ -5,6 +5,7 @@
 	import UserPopupPortal from './UserPopupPortal.svelte';
 	// @ts-ignore
 	import { clickOutside } from '$lib/actions/clickOutside';
+	import { logoutUser } from '@api/auth';
 
 	let isOpen = false;
 
@@ -37,7 +38,6 @@
 
 	async function logout() {
 		await logoutUser();
-		window.location.reload();
 	}
 </script>
 
