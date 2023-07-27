@@ -6,12 +6,12 @@
 
 	export let data: PageData;
 
-	const { isAuthenticated } = getAuthContext();
+	const { auth } = getAuthContext();
 
-	if (!$isAuthenticated) goto('/twitter-clone/auth/login');
+	if (!$auth.isAuthenticated) goto('/twitter-clone/auth/login');
 </script>
 
-{#if $isAuthenticated}
+{#if $auth.isAuthenticated}
 	<MainTwitterLayout {data}>
 		<slot />
 	</MainTwitterLayout>

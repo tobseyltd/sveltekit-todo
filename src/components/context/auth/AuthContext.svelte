@@ -1,30 +1,35 @@
 <script lang="ts">
 	import { onMount, setContext } from 'svelte';
-	import { writable } from 'svelte/store';
-	import { key } from '.';
 	import { onAuthStateChanged } from 'firebase/auth';
-	import Loader from '@components/utils/Loader.svelte';
 	import { firebaseAuth } from '@db/index';
+	import { key } from '.';
+	import { writable } from 'svelte/store';
+	import Loader from '@components/utils/Loader.svelte';
 
 	let isLoading = writable(true);
-	let isAuthenticated = writable(false);
+	let auth = writable({
+		isAuthenticated: false,
+		user: {}
+	});
 
 	setContext(key, {
-		isAuthenticated,
+		auth,
 		isLoading
 	});
 
-	onMount(() => {
+	onMount(listenToAuthChanges);
+
+	function listenToAuthChanges() {
 		onAuthStateChanged(firebaseAuth, (user) => {
-			if (user) isAuthenticated.set(true);
-			else isAuthenticated.set(false);
+			if (user) auth.set({ isAuthenticated: true, user });
+			else auth.set({ isAuthenticated: false, user: {} });
 
 			$isLoading = false;
 		});
-	});
+	}
 </script>
 
-{#if $isLoading && !$isAuthenticated}
+{#if $isLoading}
 	<Loader />
 {:else}
 	<slot />
