@@ -1,5 +1,32 @@
 import { db } from '@db/index';
-import { Timestamp, doc, addDoc, collection } from 'firebase/firestore';
+import {
+	Timestamp,
+	doc,
+	getDocs,
+	query,
+	addDoc,
+	collection,
+	type DocumentData,
+	getDoc
+} from 'firebase/firestore';
+
+async function fetchGlides() {
+	const queryData = query(collection(db, 'glides'));
+	const querySnap = await getDocs(queryData);
+
+	const glides = await Promise.all(
+		querySnap.docs.map(async (doc: DocumentData) => {
+			const glide = doc.data();
+			const userSnap = await getDoc(glide.user);
+
+			glide.user = userSnap.data();
+
+			return { ...glide, id: doc.id };
+		})
+	);
+
+	return { glides };
+}
 
 async function postGlide(glideData: { message: string; uid: string }) {
 	const userRef = doc(db, 'users', glideData.uid);
@@ -19,4 +46,4 @@ async function postGlide(glideData: { message: string; uid: string }) {
 	return { ...glide, id: newGlide.id };
 }
 
-export { postGlide };
+export { postGlide, fetchGlides };

@@ -2,8 +2,9 @@
 	import PostMessenger from '@components/utils/PostMessenger.svelte';
 	import GlidePost from '../../../components/twitter-clone/glides/GlidePost.svelte';
 	import { createGlideStore } from '$lib/stores/createGlideStore';
+	import DataLoaderIndicator from '@components/utils/DataLoaderIndicator.svelte';
 
-	const { glides, addGlide } = createGlideStore();
+	const { glides, addGlide, loading } = createGlideStore();
 </script>
 
 <PostMessenger onSubmitGlide={addGlide} />
@@ -13,4 +14,7 @@
 {#each $glides as glide (glide.id)}
 	<GlidePost {glide} />
 {/each}
+{#if $loading}
+	<DataLoaderIndicator />
+{/if}
 <!-- GLIDE POST END -->
