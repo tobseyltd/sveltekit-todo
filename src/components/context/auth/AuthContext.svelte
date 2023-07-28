@@ -4,6 +4,7 @@
 	import { firebaseAuth } from '@db/index';
 	import { key } from '.';
 	import { writable } from 'svelte/store';
+	import { getUser } from '@api/users';
 	import Loader from '@components/utils/Loader.svelte';
 
 	let isLoading = writable(true);
@@ -20,9 +21,12 @@
 	onMount(listenToAuthChanges);
 
 	function listenToAuthChanges() {
-		onAuthStateChanged(firebaseAuth, (user) => {
-			if (user) auth.set({ isAuthenticated: true, user });
-			else auth.set({ isAuthenticated: false, user: {} });
+		onAuthStateChanged(firebaseAuth, async (user) => {
+			if (user) {
+				const registeredUser = await getUser(user.uid);
+
+				auth.set({ isAuthenticated: true, user: { registeredUser } });
+			} else auth.set({ isAuthenticated: false, user: {} });
 
 			$isLoading = false;
 		});
