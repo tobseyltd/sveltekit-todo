@@ -33,7 +33,9 @@
 	},
 	"type": "module",
 	"dependencies": {
+		"dayjs": "^1.11.9",
 		"firebase": "^10.1.0",
+		"moment": "^2.29.4",
 		"svelte-icons": "^2.1.0",
 		"uuid": "^9.0.0",
 		"uuidv4": "^6.2.13"

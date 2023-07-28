@@ -1,22 +1,55 @@
 <script lang="ts">
+	import { postGlide } from '@api/glides';
 	import { getUIContext } from '@components/context/UI';
 	import { getAuthContext } from '@components/context/auth';
 	import TiImageOutline from 'svelte-icons/ti/TiImageOutline.svelte';
 	import { v4 as uuidv4 } from 'uuid';
 
+	export let onSubmitGlide: (data: any) => void;
+
 	const { auth } = getAuthContext();
 	const { addSnackbar } = getUIContext();
 
-	let glideContent: string;
+	let loading = false;
+	let glideContent = { message: '' };
 
 	// Helper Functions ////////////////////////////
-	function createGlide() {
-		addSnackbar({
-			message: 'Glide added',
-			type: 'success',
-			id: uuidv4()
-		});
+	async function submitGlide() {
+		loading = true;
+
+		const glideData = {
+			...glideContent,
+			uid: $auth?.user?.uid
+		};
+
+		try {
+			const glide = await postGlide(glideData);
+
+			const user = {
+				nickName: $auth.user.nickName,
+				avatar: $auth.user.avatar
+			};
+
+			onSubmitGlide({ ...glide, user });
+
+			addSnackbar({
+				message: 'Glide added',
+				type: 'success',
+				id: uuidv4()
+			});
+			glideContent.message = '';
+		} catch (ERROR: any) {
+			addSnackbar({
+				message: ERROR.message,
+				type: 'error',
+				id: uuidv4()
+			});
+		} finally {
+			loading = false;
+		}
 	}
+
+
 </script>
 
 <div class="flex-row px-4 py-1 flex-it">
@@ -31,7 +64,7 @@
 	<div class="flex-grow flex-it">
 		<div class="flex-it">
 			<textarea
-				bind:value={glideContent}
+				bind:value={glideContent.message}
 				name="content"
 				rows="1"
 				id="glide"
@@ -39,7 +72,7 @@
 				placeholder={"What's new?"}
 			/>
 		</div>
-		<div class="flex-row items-center mb-1 flex-it xs:justify-between">
+		<div class="flex-row items-center justify-between mb-1 flex-it">
 			<div
 				class="mt-3 mr-3 text-white transition cursor-pointer flex-it hover:text-blue-400"
 			>
@@ -52,7 +85,8 @@
 			</div>
 			<div class="w-32 mt-3 cursor-pointer flex-it">
 				<button
-					on:click={createGlide}
+					disabled={loading || glideContent.message === ''}
+					on:click={submitGlide}
 					type="button"
 					class="px-4 py-2 font-bold text-white transition duration-200 bg-blue-400 rounded-full disabled:cursor-not-allowed disabled:bg-gray-400 hover:bg-blue-500 flex-it"
 				>
