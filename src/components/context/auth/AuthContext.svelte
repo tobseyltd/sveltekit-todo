@@ -25,7 +25,7 @@
 			if (user) {
 				const registeredUser = await getUser(user.uid);
 
-				auth.set({ isAuthenticated: true, user: { registeredUser } });
+				auth.set({ isAuthenticated: true, user: { ...registeredUser } });
 			} else auth.set({ isAuthenticated: false, user: {} });
 
 			$isLoading = false;

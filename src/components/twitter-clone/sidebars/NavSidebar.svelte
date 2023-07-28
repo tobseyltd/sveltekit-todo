@@ -4,8 +4,10 @@
 	import UserPopup from '@components/utils/UserPopup.svelte';
 	import { navLinks } from './navLinks';
 	import { getUIContext } from '@components/context/UI';
+	import { getAuthContext } from '@components/context/auth';
 
 	const { isXl } = getUIContext();
+	const { auth } = getAuthContext();
 </script>
 
 <div class="w-20 xl:w-80 flex-it">
@@ -70,17 +72,13 @@
 					>
 						<div class="flex-it">
 							<div class="w-10 h-10 overflow-visible">
-								<img
-									alt=""
-									class="rounded-full"
-									src="https://www.pinclipart.com/picdir/middle/133-1331433_free-user-avatar-icons-happy-flat-design-png.png"
-								/>
+								<img alt="" class="rounded-full" src={$auth?.user?.avatar} />
 							</div>
 						</div>
 						<div
 							class="flex-row items-center justify-between flex-grow hidden flex-it xl:flex"
 						>
-							<div class="mx-3 font-bold flex-it">Filip99</div>
+							<div class="mx-3 font-bold flex-it">{$auth?.user?.nickName}</div>
 							<div class="flex-it">
 								<div class="icon">
 									<TiSocialFlickr />
