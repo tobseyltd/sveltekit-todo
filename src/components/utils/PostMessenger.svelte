@@ -1,14 +1,21 @@
 <script lang="ts">
+	import { getUIContext } from '@components/context/UI';
 	import { getAuthContext } from '@components/context/auth';
 	import TiImageOutline from 'svelte-icons/ti/TiImageOutline.svelte';
+	import { v4 as uuidv4 } from 'uuid';
 
 	const { auth } = getAuthContext();
+	const { addSnackbar } = getUIContext();
 
-	let glideContent = '';
+	let glideContent: string;
 
 	// Helper Functions ////////////////////////////
 	function createGlide() {
-		console.log('new glide');
+		addSnackbar({
+			message: 'Glide added',
+			type: 'success',
+			id: uuidv4()
+		});
 	}
 </script>
 
