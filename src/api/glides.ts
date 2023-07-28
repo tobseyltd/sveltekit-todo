@@ -6,12 +6,16 @@ import {
 	query,
 	addDoc,
 	collection,
-	type DocumentData,
-	getDoc
+	getDoc,
+	orderBy,
+	limit,
+	type DocumentData
 } from 'firebase/firestore';
 
 async function fetchGlides() {
-	const queryData = query(collection(db, 'glides'));
+	const constraints = [orderBy('date', 'desc'), limit(10)];
+
+	const queryData = query(collection(db, 'glides'), ...constraints);
 	const querySnap = await getDocs(queryData);
 
 	const glides = await Promise.all(
