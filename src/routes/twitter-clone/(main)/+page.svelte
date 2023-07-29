@@ -4,15 +4,16 @@
 	import { createGlideStore } from '$lib/stores/createGlideStore';
 	import DataLoaderIndicator from '@components/utils/DataLoaderIndicator.svelte';
 
-	const { glides, addGlide, loading } = createGlideStore();
+	const { glidePages, addGlide, loading } = createGlideStore();
 </script>
 
 <PostMessenger onSubmitGlide={addGlide} />
 <div class="h-px my-1 bg-gray-700" />
-
 <!-- GLIDE POST START -->
-{#each $glides as glide (glide.id)}
-	<GlidePost {glide} />
+{#each Object.keys($glidePages) as page}
+	{#each $glidePages[page].glides as glide (glide.id)}
+		<GlidePost {glide} />
+	{/each}
 {/each}
 {#if $loading}
 	<DataLoaderIndicator />
