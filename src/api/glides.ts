@@ -14,7 +14,7 @@ import {
 } from 'firebase/firestore';
 
 async function fetchGlides(lastDocGlide: GlideProps) {
-	const constraints = [orderBy('date', 'desc'), limit(10)];
+	const constraints: any = [orderBy('date', 'desc'), limit(10)];
 
 	if (lastDocGlide) constraints.push(startAfter(lastDocGlide));
 
