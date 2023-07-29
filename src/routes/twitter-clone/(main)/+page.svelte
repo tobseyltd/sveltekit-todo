@@ -1,21 +1,18 @@
 <script lang="ts">
 	import PostMessenger from '@components/utils/PostMessenger.svelte';
-	import GlidePost from '../../../components/twitter-clone/glides/GlidePost.svelte';
 	import { createGlideStore } from '$lib/stores/createGlideStore';
-	import DataLoaderIndicator from '@components/utils/DataLoaderIndicator.svelte';
+	import PaginatedGlides from '@components/twitter-clone/glides/PaginatedGlides.svelte';
 
-	const { glidePages, addGlide, loading } = createGlideStore();
+	const { glidePages, addGlide, loading, loadGlides } = createGlideStore();
 </script>
 
 <PostMessenger onSubmitGlide={addGlide} />
 <div class="h-px my-1 bg-gray-700" />
 <!-- GLIDE POST START -->
-{#each Object.keys($glidePages) as page}
-	{#each $glidePages[page].glides as glide (glide.id)}
-		<GlidePost {glide} />
-	{/each}
-{/each}
-{#if $loading}
-	<DataLoaderIndicator />
-{/if}
+<PaginatedGlides
+	glidePages={$glidePages}
+	loadMoreGlides={loadGlides}
+	loading={$loading}
+/>
+
 <!-- GLIDE POST END -->

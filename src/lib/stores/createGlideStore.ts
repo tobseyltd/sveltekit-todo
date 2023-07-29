@@ -26,19 +26,24 @@ export function createGlideStore() {
 	const page = writable(key);
 	const loading = writable(false);
 
+	let lastGlide: any;
+
 	onMount(loadGlides);
 
 	async function loadGlides() {
 		const currentPage = get(page);
 
+		if (Number(currentPage) > 1 && !lastGlide) return;
+
 		loading.set(true);
 		try {
-			const { glides }: any = await fetchGlides();
+			const { glides, lastDocGlide }: any = await fetchGlides(lastGlide);
 
-			if (glides.length > 0)
+			if (glides.length > 0) {
 				glidePages.update((pages) => ({ ...pages, [currentPage]: { glides } }));
-
-			console.log(get(glidePages));
+				page.update((p) => Number(p) + 1);
+			}
+			lastGlide = lastDocGlide;
 		} catch (ERROR: any) {
 			addSnackbar({
 				message: ERROR.message,
@@ -55,12 +60,12 @@ export function createGlideStore() {
 			...pages,
 			[key]: { glides: [glide, ...pages[key].glides] }
 		}));
-		//glides.update((glideArray) => [...glideArray, glide]);
 	}
 
 	return {
 		glidePages: { subscribe: glidePages.subscribe },
 		loading: { subscribe: loading.subscribe },
-		addGlide
+		addGlide,
+		loadGlides
 	};
 }

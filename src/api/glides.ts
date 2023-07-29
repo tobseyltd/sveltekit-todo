@@ -1,3 +1,4 @@
+import type { GlideProps } from '$lib/stores/createGlideStore';
 import { db } from '@db/index';
 import {
 	Timestamp,
@@ -9,17 +10,21 @@ import {
 	getDoc,
 	orderBy,
 	limit,
-	type DocumentData
+	startAfter
 } from 'firebase/firestore';
 
-async function fetchGlides() {
+async function fetchGlides(lastDocGlide: GlideProps) {
 	const constraints = [orderBy('date', 'desc'), limit(10)];
+
+	if (lastDocGlide) constraints.push(startAfter(lastDocGlide));
 
 	const queryData = query(collection(db, 'glides'), ...constraints);
 	const querySnap = await getDocs(queryData);
 
+	const lastGlide = querySnap.docs[querySnap.docs.length - 1];
+
 	const glides = await Promise.all(
-		querySnap.docs.map(async (doc: DocumentData) => {
+		querySnap.docs.map(async (doc) => {
 			const glide = doc.data();
 			const userSnap = await getDoc(glide.user);
 
@@ -29,7 +34,7 @@ async function fetchGlides() {
 		})
 	);
 
-	return { glides };
+	return { glides, lastGlide };
 }
 
 async function postGlide(glideData: { message: string; uid: string }) {
