@@ -35,7 +35,7 @@ async function registerUser(form: any) {
 		followers: [],
 		following: [],
 		followersCount: 0,
-		followingCOunt: 0
+		followingCount: 0
 	};
 
 	const userDoc = doc(db, 'users', registerUser.uid);

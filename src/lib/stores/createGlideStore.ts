@@ -25,7 +25,7 @@ export function createGlideStore() {
 	const glidePages = writable<{ [key: string]: { glides: GlideProps[] } }>({});
 	const page = writable(key);
 	const loading = writable(false);
-
+	
 	let lastGlide: any;
 
 	onMount(loadGlides);
@@ -34,8 +34,8 @@ export function createGlideStore() {
 		const currentPage = get(page);
 
 		if (Number(currentPage) > 1 && !lastGlide) return;
-
 		loading.set(true);
+
 		try {
 			const { glides, lastDocGlide }: any = await fetchGlides(lastGlide);
 
@@ -43,6 +43,7 @@ export function createGlideStore() {
 				glidePages.update((pages) => ({ ...pages, [currentPage]: { glides } }));
 				page.update((p) => Number(p) + 1);
 			}
+
 			lastGlide = lastDocGlide;
 		} catch (ERROR: any) {
 			addSnackbar({

@@ -7,10 +7,12 @@
 	import { getUser } from '@api/users';
 	import Loader from '@components/utils/Loader.svelte';
 
+	onMount(listenToAuthChanges);
+
 	let isLoading = writable(true);
 	let auth = writable({
 		isAuthenticated: false,
-		user: {}
+		user: undefined
 	});
 
 	setContext(key, {
@@ -18,15 +20,13 @@
 		isLoading
 	});
 
-	onMount(listenToAuthChanges);
-
 	function listenToAuthChanges() {
 		onAuthStateChanged(firebaseAuth, async (user) => {
 			if (user) {
 				const registeredUser = await getUser(user.uid);
 
 				auth.set({ isAuthenticated: true, user: { ...registeredUser } });
-			} else auth.set({ isAuthenticated: false, user: {} });
+			} else auth.set({ isAuthenticated: false, user: undefined });
 
 			$isLoading = false;
 		});
