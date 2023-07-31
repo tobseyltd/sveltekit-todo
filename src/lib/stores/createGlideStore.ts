@@ -1,4 +1,4 @@
-import { fetchGlides } from '@api/glides';
+import { fetchGlides, onGlidesSnapshot } from '@api/glides';
 import { getUIContext } from '@components/context/UI';
 import { onMount } from 'svelte';
 import { writable, get } from 'svelte/store';
@@ -24,11 +24,20 @@ export function createGlideStore(loggedInUser: anys) {
 	const { addSnackbar } = getUIContext();
 	const glidePages = writable<{ [key: string]: { glides: GlideProps[] } }>({});
 	const page = writable(key);
+	const freshGlides = writable<GlideProps[]>([]);
 	const loading = writable(false);
 
 	let lastGlide: any;
+	let unsub: any;
 
-	onMount(loadGlides);
+	onMount(() => {
+		loadGlides();
+		subscribeToNewGlides();
+
+		return () => {
+			unsubFromNewGlides();
+		};
+	});
 
 	async function loadGlides() {
 		const currentPage = get(page);
@@ -61,15 +70,43 @@ export function createGlideStore(loggedInUser: anys) {
 
 	function addGlide(glide: GlideProps) {
 		glidePages.update((pages) => ({
-			...pages,
 			[key]: { glides: [glide, ...pages[key].glides] }
 		}));
+	}
+
+	function subscribeToNewGlides() {
+		if (loggedInUser.following.length === 0) {
+			return;
+		}
+		unsub = onGlidesSnapshot(loggedInUser, (newGlides) => {
+			freshGlides.set(newGlides);
+		});
+	}
+
+	function unsubFromNewGlides() {
+		unsub && unsub();
+	}
+
+	function resubToGlides() {
+		unsubFromNewGlides();
+		subscribeToNewGlides();
+	}
+
+	function displayFreshGlides() {
+		get(freshGlides).forEach((freshGlide) => {
+			addGlide(freshGlide);
+		});
+		resubToGlides();
+		freshGlides.set([]);
 	}
 
 	return {
 		glidePages: { subscribe: glidePages.subscribe },
 		loading: { subscribe: loading.subscribe },
+		freshGlides: { subscribe: freshGlides.subscribe },
 		addGlide,
-		loadGlides
+		loadGlides,
+		subscribeToNewGlides,
+		displayFreshGlides
 	};
 }

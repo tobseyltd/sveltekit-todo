@@ -9,10 +9,40 @@ import {
 	collection,
 	getDoc,
 	orderBy,
+	onSnapshot,
 	limit,
 	startAfter,
 	where
 } from 'firebase/firestore';
+
+async function getGlidesFromDocs(qSnapshot: any) {
+	return await Promise.all(
+		qSnapshot.docs.map(async (doc) => {
+			const glide = doc.data();
+			const userSnap = await getDoc(glide.user);
+
+			glide.user = userSnap.data();
+
+			return { ...glide, id: doc.id };
+		})
+	);
+}
+
+function onGlidesSnapshot(loggedInUser, callback) {
+	const watchCollection = collection(db, 'glides');
+
+	const constraints = [
+		where('date', '>', Timestamp.now()),
+		where('user', 'in', loggedInUser.following)
+	];
+
+	const q = query(watchCollection, ...constraints);
+
+	return onSnapshot(q, async (querySnapshot) => {
+		const glides = await getGlidesFromDocs(querySnapshot);
+		callback(glides);
+	});
+}
 
 async function fetchGlides(lastDocGlide: GlideProps, loggedInUser: any) {
 	const _loggedInUSerRef = doc(db, 'users', loggedInUser.uid);
@@ -35,16 +65,7 @@ async function fetchGlides(lastDocGlide: GlideProps, loggedInUser: any) {
 
 	const lastGlide = querySnap.docs[querySnap.docs.length - 1];
 
-	const glides = await Promise.all(
-		querySnap.docs.map(async (doc) => {
-			const glide = doc.data();
-			const userSnap = await getDoc(glide.user);
-
-			glide.user = userSnap.data();
-
-			return { ...glide, id: doc.id };
-		})
-	);
+	const glides = await getGlidesFromDocs(querySnap);
 
 	return { glides, lastGlide };
 }
@@ -67,4 +88,4 @@ async function postGlide(glideData: { message: string; uid: string }) {
 	return { ...glide, id: newGlide.id };
 }
 
-export { postGlide, fetchGlides };
+export { postGlide, fetchGlides, onGlidesSnapshot };

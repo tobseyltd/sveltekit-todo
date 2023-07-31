@@ -12,7 +12,7 @@
 	let isLoading = writable(true);
 	let auth = writable({
 		isAuthenticated: false,
-		user: undefined
+		user: {}
 	});
 
 	setContext(key, {
@@ -21,7 +21,7 @@
 		updateUser
 	});
 
-	function updateUser(userData) {
+	function updateUser(userData: any) {
 		auth.update((authState) => ({
 			...authState,
 			user: { ...authState.user, ...userData }
@@ -33,16 +33,18 @@
 			if (user) {
 				const registeredUser = await getUser(user.uid);
 
-				auth.set({ isAuthenticated: true, user: { ...registeredUser } });
-			} else auth.set({ isAuthenticated: false, user: undefined });
+				auth.set({ isAuthenticated: true, user: <any>{ ...registeredUser } });
+			} else auth.set({ isAuthenticated: false, user: {} });
 
-			$isLoading = false;
+			isLoading.set(false);
 		});
 	}
 </script>
 
 {#if $isLoading}
-	<Loader />
+	<div>
+		<Loader />
+	</div>
 {:else}
 	<slot />
 {/if}
