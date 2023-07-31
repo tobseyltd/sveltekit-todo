@@ -20,12 +20,12 @@ export interface GlideProps {
 
 const key: number | string = '';
 
-export function createGlideStore() {
+export function createGlideStore(loggedInUser: anys) {
 	const { addSnackbar } = getUIContext();
 	const glidePages = writable<{ [key: string]: { glides: GlideProps[] } }>({});
 	const page = writable(key);
 	const loading = writable(false);
-	
+
 	let lastGlide: any;
 
 	onMount(loadGlides);
@@ -37,7 +37,10 @@ export function createGlideStore() {
 		loading.set(true);
 
 		try {
-			const { glides, lastDocGlide }: any = await fetchGlides(lastGlide);
+			const { glides, lastDocGlide }: any = await fetchGlides(
+				lastGlide,
+				loggedInUser
+			);
 
 			if (glides.length > 0) {
 				glidePages.update((pages) => ({ ...pages, [currentPage]: { glides } }));

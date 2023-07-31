@@ -10,13 +10,25 @@ import {
 	getDoc,
 	orderBy,
 	limit,
-	startAfter
+	startAfter,
+	where
 } from 'firebase/firestore';
 
-async function fetchGlides(lastDocGlide: GlideProps) {
+async function fetchGlides(lastDocGlide: GlideProps, loggedInUser: any) {
+	const _loggedInUSerRef = doc(db, 'users', loggedInUser.uid);
 	const constraints: any = [orderBy('date', 'desc'), limit(10)];
 
-	if (lastDocGlide) constraints.push(startAfter(lastDocGlide));
+	if (loggedInUser.following.length > 0) {
+		constraints.push(
+			where('user', 'in', [...loggedInUser.following, _loggedInUSerRef])
+		);
+	} else {
+		constraints.push(where('user', '==', _loggedInUSerRef));
+	}
+
+	if (lastDocGlide) {
+		constraints.push(startAfter(lastDocGlide));
+	}
 
 	const queryData = query(collection(db, 'glides'), ...constraints);
 	const querySnap = await getDocs(queryData);

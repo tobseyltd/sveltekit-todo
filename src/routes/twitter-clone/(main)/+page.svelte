@@ -3,8 +3,12 @@
 	import { createGlideStore } from '$lib/stores/createGlideStore';
 	import PaginatedGlides from '@components/twitter-clone/glides/PaginatedGlides.svelte';
 	import { pageStore } from '$lib/stores/pagestore';
+	import { getAuthContext } from '@components/context/auth';
 
-	const { glidePages, addGlide, loading, loadGlides } = createGlideStore();
+	const { auth }: any = getAuthContext();
+	const { glidePages, addGlide, loading, loadGlides } = createGlideStore(
+		$auth.user
+	);
 
 	pageStore.title.set('Home');
 </script>
