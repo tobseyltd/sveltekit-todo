@@ -5,7 +5,10 @@ import {
 	collection,
 	getDocs,
 	query,
-	where
+	where,
+	updateDoc,
+	increment,
+	arrayUnion
 } from 'firebase/firestore';
 
 async function fetchUsers(loggedInUser) {
@@ -15,7 +18,14 @@ async function fetchUsers(loggedInUser) {
 	);
 	const usersSnap = await getDocs(usersCollection);
 
-	return usersSnap.docs.map((doc) => doc.data());
+	return usersSnap.docs
+		.map((doc) => doc.data())
+		.filter((user) => {
+			const hasFollowing =
+				loggedInUser.following.filter((following) => following.id === user.uid)
+					.length > 0;
+			return !hasFollowing;
+		});
 }
 
 async function getUser(uid: string) {
@@ -25,4 +35,20 @@ async function getUser(uid: string) {
 	return docSnap.data();
 }
 
-export { getUser, fetchUsers };
+async function followUser(followerUid, followingUid) {
+	const followerRef = doc(db, 'users', followerUid);
+	const followingRef = doc(db, 'users', followingUid);
+
+	await updateDoc(followerRef, {
+		following: arrayUnion(followingRef),
+		followingCount: increment(1)
+	});
+
+	await updateDoc(followingRef, {
+		followers: arrayUnion(followerRef),
+		followersCount: increment(1)
+	});
+	return followingRef;
+}
+
+export { getUser, fetchUsers, followUser };

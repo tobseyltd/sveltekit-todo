@@ -17,8 +17,16 @@
 
 	setContext(key, {
 		auth,
-		isLoading
+		isLoading,
+		updateUser
 	});
+
+	function updateUser(userData) {
+		auth.update((authState) => ({
+			...authState,
+			user: { ...authState.user, ...userData }
+		}));
+	}
 
 	function listenToAuthChanges() {
 		onAuthStateChanged(firebaseAuth, async (user) => {

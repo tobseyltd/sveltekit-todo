@@ -1,5 +1,10 @@
 <script lang="ts">
+	import { createEventDispatcher } from 'svelte';
+
+	const dispatch = createEventDispatcher();
+
 	export let user: any;
+	export let followState: boolean;
 </script>
 
 <div class="p-4 flex-it">
@@ -21,6 +26,10 @@
 
 					<div class="w-32 mt-3 cursor-pointer flex-it">
 						<button
+							disabled={followState}
+							on:click={() => {
+								dispatch('followClick', user);
+							}}
 							type="button"
 							class="px-4 py-2 font-bold text-white transition duration-200 bg-blue-500 rounded-full sabg-blue-400 disabled:cursor-not-allowed disabled:bg-gray-400 hover:bg-blue-700 flex-it"
 						>
