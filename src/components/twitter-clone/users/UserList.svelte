@@ -81,4 +81,10 @@
 			{followState}
 		/>
 	{/each}
+{:else}
+	<div class="flex-it">
+		<div class="p-4 mx-4 mt-6 bg-yellow-600 rounded-lg">
+			You follow all users available
+		</div>
+	</div>
 {/if}
