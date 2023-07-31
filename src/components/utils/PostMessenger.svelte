@@ -7,7 +7,7 @@
 
 	export let onSubmitGlide: (data: any) => void;
 
-	const { auth } = getAuthContext();
+	const { auth }: any = getAuthContext();
 	const { addSnackbar } = getUIContext();
 
 	let loading = false;
@@ -49,7 +49,13 @@
 		}
 	}
 
+	function autoTextSize(EVENT: any) {
+		const element = EVENT.target;
+		element.style.height = '0px';
 
+		const { scrollHeight } = element;
+		element.style.height = scrollHeight + 'px';
+	}
 </script>
 
 <div class="flex-row px-4 py-1 flex-it">
@@ -64,6 +70,7 @@
 	<div class="flex-grow flex-it">
 		<div class="flex-it">
 			<textarea
+				on:input={autoTextSize}
 				bind:value={glideContent.message}
 				name="content"
 				rows="1"
