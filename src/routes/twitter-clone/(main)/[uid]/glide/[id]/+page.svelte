@@ -1,18 +1,30 @@
 <script lang="ts">
 	import { page } from '$app/stores';
 	import { createGlideIdStore } from '$lib/stores/createGlideIdStore';
+	import { createSubglideGlideStore } from '$lib/stores/createSubGlideStore';
 	import { pageStore } from '$lib/stores/pagestore';
 	import GlidePost from '@components/twitter-clone/glides/GlidePost.svelte';
 	import BackButton from '@components/utils/BackButton.svelte';
 	import DataLoaderIndicator from '@components/utils/DataLoaderIndicator.svelte';
 	import PostMessenger from '@components/utils/PostMessenger.svelte';
+	import { onMount } from 'svelte';
 
 	const { glide, loading } = createGlideIdStore(
 		$page.params.uid,
 		$page.params.id
 	);
 
+	const { pages, loadGlides } = createSubglideGlideStore();
+
 	pageStore.title.set(BackButton);
+
+	onMount(() => {
+		loadGlides();
+	});
+
+	$: {
+		console.log($pages);
+	}
 </script>
 
 {#if $loading}

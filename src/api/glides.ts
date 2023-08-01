@@ -68,6 +68,15 @@ async function fetchGlide(uid, id) {
 	return glide;
 }
 
+async function fetchSubglides() {
+	console.log('Fetching Subglides');
+
+	return {
+		glidese: [],
+		lastGlide: {}
+	};
+}
+
 async function fetchGlides(lastDocGlide: GlideProps, loggedInUser: any) {
 	const _loggedInUSerRef = doc(db, 'users', loggedInUser.uid);
 	const constraints: any = [orderBy('date', 'desc'), limit(10)];
@@ -115,4 +124,4 @@ async function postGlide(glideData: { message: string; uid: string }) {
 	return { ...glide, id: newGlide.id, lookup: newGlide.path };
 }
 
-export { postGlide, fetchGlides, onGlidesSnapshot, fetchGlide };
+export { postGlide, fetchGlides, onGlidesSnapshot, fetchGlide, fetchSubglides };
