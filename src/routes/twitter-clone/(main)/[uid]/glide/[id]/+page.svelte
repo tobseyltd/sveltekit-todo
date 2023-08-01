@@ -22,6 +22,10 @@
 		const _glide = await getGlide();
 		loadGlides(_glide.lookup);
 	});
+
+	$: {
+		console.log($pages);
+	}
 </script>
 
 {#if $loading}
