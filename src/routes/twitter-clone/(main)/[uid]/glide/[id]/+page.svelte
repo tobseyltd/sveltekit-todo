@@ -12,15 +12,18 @@
 	import { onMount } from 'svelte';
 
 	const { glide, loading, getGlide, incrementSubglidesCount }: any =
-		createGlideIdStore(() => {
-			return fetchGlide($page.params.uid, $page.params.id);
+		createGlideIdStore(async () => {
+			const _glide = await fetchGlide($page.params.uid, $page.params.id);
+			onGlideLoaded(_glide);
+			return _glide;
 		});
 
 	const {
 		pages,
 		loading: loadingSubGlides,
 		loadGlides,
-		addGlide
+		addGlide,
+		resetPagination
 	} = createSubglideGlideStore();
 
 	pageStore.title.set(BackButton);
@@ -29,10 +32,12 @@
 		if ($glide && !$loading && $page.params.id !== $glide.id) getGlide();
 	}
 
-	onMount(async () => {
-		const _glide = await getGlide();
-		loadGlides(_glide.lookup);
-	});
+	onMount(getGlide);
+
+	function onGlideLoaded(glide: any) {
+		resetPagination();
+		loadGlides(glide.lookup);
+	}
 </script>
 
 {#if $loading}

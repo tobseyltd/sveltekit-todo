@@ -49,10 +49,27 @@ export function createSubglideGlideStore() {
 		}));
 	}
 
+	function resetPagination() {
+		pages.update((_pages) => {
+			for (let i = 1; i < Object.keys(_pages).length; i++) {
+				_pages[i] = {
+					glides: []
+				};
+
+			}
+			return _pages;
+		});
+
+		lastGlideDoc = null;
+		page.set(1);
+
+	}
+
 	return {
 		pages: { subscribe: pages.subscribe },
 		loading: { subscribe: loading.subscribe },
 		loadGlides,
-		addGlide
+		addGlide,
+		resetPagination
 	};
 }
