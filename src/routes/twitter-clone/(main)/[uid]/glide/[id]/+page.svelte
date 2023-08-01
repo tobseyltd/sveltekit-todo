@@ -16,7 +16,8 @@
 	const {
 		pages,
 		loading: loadingSubGlides,
-		loadGlides
+		loadGlides,
+		addGlide
 	} = createSubglideGlideStore();
 
 	pageStore.title.set(BackButton);
@@ -41,7 +42,8 @@
 		</div>
 		<PostMessenger
 			showAvatar={false}
-			onSubmitGlide={() => {
+			onSubmitGlide={(glide) => {
+				addGlide(glide);
 				incrementSubglidesCount();
 			}}
 			glideLookup={$glide.lookup}

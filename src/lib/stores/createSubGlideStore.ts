@@ -43,9 +43,16 @@ export function createSubglideGlideStore() {
 		}
 	}
 
+	function addGlide(glide: GlideProps) {
+		pages.update((pages) => ({
+			[key]: { glides: [glide, ...pages[key].glides] }
+		}));
+	}
+
 	return {
 		pages: { subscribe: pages.subscribe },
 		loading: { subscribe: loading.subscribe },
-		loadGlides
+		loadGlides,
+		addGlide
 	};
 }
