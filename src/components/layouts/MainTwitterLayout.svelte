@@ -5,7 +5,7 @@
 
 	export let data: any;
 
-	const { title } = pageStore;
+	const { title }: any = pageStore;
 </script>
 
 <div class="flex justify-center w-full h-full text-gray-100 bg-gray-900">
@@ -19,7 +19,11 @@
 			<div
 				class="z-10 p-4 text-sm font-bold flex-it h-14 xl:text-xl backdrop-blur-md bg-opacity-70"
 			>
-				{$title}
+				{#if typeof $title === 'string'}
+					{$title}
+				{:else}
+					<svelte:component this={$title} />
+				{/if}
 			</div>
 			<slot />
 		</div>

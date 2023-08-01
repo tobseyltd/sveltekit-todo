@@ -1,7 +1,7 @@
 import { writable } from 'svelte/store';
 
 function createPageStore() {
-	const title = writable('');
+	const title = writable();
 
 	return { title };
 }

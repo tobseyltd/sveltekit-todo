@@ -1,7 +1,9 @@
 <script lang="ts">
 	import { page } from '$app/stores';
 	import { createGlideIdStore } from '$lib/stores/createGlideIdStore';
+	import { pageStore } from '$lib/stores/pagestore';
 	import GlidePost from '@components/twitter-clone/glides/GlidePost.svelte';
+	import BackButton from '@components/utils/BackButton.svelte';
 	import DataLoaderIndicator from '@components/utils/DataLoaderIndicator.svelte';
 	import PostMessenger from '@components/utils/PostMessenger.svelte';
 
@@ -9,6 +11,8 @@
 		$page.params.uid,
 		$page.params.id
 	);
+
+	pageStore.title.set(BackButton);
 </script>
 
 {#if $loading}
