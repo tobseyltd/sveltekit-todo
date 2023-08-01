@@ -13,7 +13,9 @@ import {
 	limit,
 	startAfter,
 	where,
-	setDoc
+	setDoc,
+	updateDoc,
+	increment
 } from 'firebase/firestore';
 
 async function getGlidesFromDocs(qSnapshot: any) {
@@ -140,6 +142,13 @@ async function postGlide(
 
 	const glideCollection = getGlideCollection(glideLookup);
 	const newGlide = await addDoc(glideCollection, glide);
+
+	if (glideLookup) {
+		const ref = doc(db, glideLookup);
+		await updateDoc(ref, {
+			subglidesCount: increment(1)
+		});
+	}
 
 	const userGlideRef = doc(userRef, 'glides', newGlide.id);
 	await setDoc(userGlideRef, { lookup: newGlide });
