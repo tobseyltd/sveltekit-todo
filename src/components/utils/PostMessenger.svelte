@@ -7,6 +7,7 @@
 
 	export let onSubmitGlide: (data: any) => void;
 	export let showAvatar = true;
+	export let glideLookup: any = null;
 
 	const { auth }: any = getAuthContext();
 	const { addSnackbar } = getUIContext();
@@ -24,7 +25,7 @@
 		};
 
 		try {
-			const glide = await postGlide(glideData);
+			const glide = await postGlide(glideData, glideLookup);
 
 			const user = {
 				nickName: $auth.user.nickName,

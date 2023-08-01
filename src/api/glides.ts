@@ -103,7 +103,12 @@ async function fetchGlides(lastDocGlide: GlideProps, loggedInUser: any) {
 	return { glides, lastGlide };
 }
 
-async function postGlide(glideData: { message: string; uid: string }) {
+async function postGlide(
+	glideData: { message: string; uid: string },
+	glideLookup
+) {
+	console.log('Glide should be added to' + glideLookup);
+
 	const userRef = doc(db, 'users', glideData.uid);
 
 	const glide = {
