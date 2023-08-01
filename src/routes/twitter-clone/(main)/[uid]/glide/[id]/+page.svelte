@@ -9,7 +9,7 @@
 	import PostMessenger from '@components/utils/PostMessenger.svelte';
 	import { onMount } from 'svelte';
 
-	const { glide, loading } = createGlideIdStore(
+	const { glide, loading, getGlide }: any = createGlideIdStore(
 		$page.params.uid,
 		$page.params.id
 	);
@@ -18,13 +18,10 @@
 
 	pageStore.title.set(BackButton);
 
-	onMount(() => {
-		loadGlides();
+	onMount(async () => {
+		const _glide = await getGlide();
+		loadGlides(_glide.lookup);
 	});
-
-	$: {
-		console.log($pages);
-	}
 </script>
 
 {#if $loading}

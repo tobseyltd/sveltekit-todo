@@ -68,12 +68,12 @@ async function fetchGlide(uid, id) {
 	return glide;
 }
 
-async function fetchSubglides() {
-	console.log('Fetching Subglides');
+async function fetchSubglides(lastGlideDoc, glideLookup) {
+	console.log('Fetching Subglides for: ' + glideLookup);
 
 	return {
-		glidese: [],
-		lastGlide: {}
+		glides: [],
+		lastGlide: null
 	};
 }
 

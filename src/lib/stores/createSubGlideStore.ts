@@ -2,33 +2,36 @@ import { fetchSubglides } from '@api/glides';
 import { getUIContext } from '@components/context/UI';
 import { writable, get } from 'svelte/store';
 import { v4 as uuid } from 'uuid';
-import type { GlideProps } from './createGlideStore';
 
 const key: number | string = '';
 
 export function createSubglideGlideStore() {
 	const { addSnackbar } = getUIContext();
-	const pages = writable<{ [key: string]: { glides: GlideProps[] } }>({});
+	const pages = writable({ [key]: { glides: [] } });
+
 	const page = writable(key);
 	const loading = writable(false);
 
-	let lastGlide: any;
+	let lastGlideDoc: any;
 
-	async function loadGlides() {
+	async function loadGlides(glideLookup) {
 		const currentPage = get(page);
 
-		if (Number(currentPage) > 1 && !lastGlide) return;
+		if (Number(currentPage) > 1 && !lastGlideDoc) return;
 		loading.set(true);
 
 		try {
-			const { glides, lastDocGlide }: any = await fetchSubglides(lastGlide);
+			const { glides, lastGlideDoc: _lastGlideDoc }: any = await fetchSubglides(
+				lastGlideDoc,
+				glideLookup
+			);
 
 			if (glides.length > 0) {
 				pages.update((_pages) => ({ ..._pages, [currentPage]: { glides } }));
 				page.update((p) => Number(p) + 1);
 			}
 
-			lastGlide = lastDocGlide;
+			lastGlideDoc = _lastGlideDoc;
 		} catch (ERROR: any) {
 			addSnackbar({
 				message: ERROR.message,

@@ -1,24 +1,25 @@
-import { fetchGlide } from '@api/glides';
-import { onMount } from 'svelte';
-import { writable } from 'svelte/store';
-import type GlideProps from './createGlideStore';
+import { fetchGlide } from "@api/glides";
+import { writable } from "svelte/store"
 
 export function createGlideIdStore(uid, id) {
-	const glide = writable<GlideProps>({});
-	const loading = writable(true);
+  const glide = writable(null);
+  const loading = writable(true);
 
-	onMount(async () => {
-		const _glides = await fetchGlide(uid, id);
-		loading.set(false);
-		glide.set(_glides);
-	});
+  async function getGlide() {
+    // const loading = writable(true);
+    const _glide = await fetchGlide(uid, id);
+    loading.set(false);
+    glide.set(_glide);
+    return _glide;
+  }
 
-	return {
-		glide: {
-			subscribe: glide.subscribe
-		},
-		loading: {
-			subscribe: loading.subscribe
-		}
-	};
+  return {
+    glide: {
+      subscribe: glide.subscribe
+    },
+    loading: {
+      subscribe: loading.subscribe
+    },
+    getGlide
+  }
 }

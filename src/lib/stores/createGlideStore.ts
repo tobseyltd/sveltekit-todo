@@ -25,12 +25,13 @@ const key: number | string = '';
 
 export function createGlideStore(loggedInUser: anys) {
 	const { addSnackbar } = getUIContext();
-	const glidePages = writable<{ [key: string]: { glides: GlideProps[] } }>({});
+	const glidePages = writable({ [key]: { glides: [] } });
+
 	const page = writable(key);
 	const freshGlides = writable<GlideProps[]>([]);
 	const loading = writable(false);
 
-	let lastGlide: any;
+	let lastGlideDoc: any;
 	let unsub: any;
 
 	onMount(() => {
@@ -45,12 +46,12 @@ export function createGlideStore(loggedInUser: anys) {
 	async function loadGlides() {
 		const currentPage = get(page);
 
-		if (Number(currentPage) > 1 && !lastGlide) return;
+		if (Number(currentPage) > 1 && !lastGlideDoc) return;
 		loading.set(true);
 
 		try {
-			const { glides, lastDocGlide }: any = await fetchGlides(
-				lastGlide,
+			const { glides, lastGlideDoc: _lastGlideDoc }: any = await fetchGlides(
+				lastGlideDoc,
 				loggedInUser
 			);
 
@@ -59,7 +60,7 @@ export function createGlideStore(loggedInUser: anys) {
 				page.update((p) => Number(p) + 1);
 			}
 
-			lastGlide = lastDocGlide;
+			lastGlideDoc = _lastGlideDoc;
 		} catch (ERROR: any) {
 			addSnackbar({
 				message: ERROR.message,
