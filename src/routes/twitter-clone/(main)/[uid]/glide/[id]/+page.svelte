@@ -4,6 +4,7 @@
 	import { createSubglideGlideStore } from '$lib/stores/createSubGlideStore';
 	import { pageStore } from '$lib/stores/pagestore';
 	import GlidePost from '@components/twitter-clone/glides/GlidePost.svelte';
+	import PaginatedGlides from '@components/twitter-clone/glides/PaginatedGlides.svelte';
 	import BackButton from '@components/utils/BackButton.svelte';
 	import DataLoaderIndicator from '@components/utils/DataLoaderIndicator.svelte';
 	import PostMessenger from '@components/utils/PostMessenger.svelte';
@@ -14,7 +15,11 @@
 		$page.params.id
 	);
 
-	const { pages, loadGlides } = createSubglideGlideStore();
+	const {
+		pages,
+		loading: loadingSubGlides,
+		loadGlides
+	} = createSubglideGlideStore();
 
 	pageStore.title.set(BackButton);
 
@@ -42,4 +47,9 @@
 			glideLookup={$glide.lookup}
 		/>
 	</div>
+	<PaginatedGlides
+		glidePages={$pages}
+		loading={$loadingSubGlides}
+		loadMoreGlides={() => {}}
+	/>
 {/if}
