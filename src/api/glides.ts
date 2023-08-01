@@ -12,23 +12,27 @@ import {
 	onSnapshot,
 	limit,
 	startAfter,
-	where
+	where,
+	setDoc
 } from 'firebase/firestore';
 
 async function getGlidesFromDocs(qSnapshot: any) {
 	return await Promise.all(
-		qSnapshot.docs.map(async (doc) => {
+		qSnapshot.docs.map(async (doc: { data: () => any; id: any }) => {
 			const glide = doc.data();
 			const userSnap = await getDoc(glide.user);
 
 			glide.user = userSnap.data();
 
-			return { ...glide, id: doc.id };
+			return { ...glide, id: doc.id, lookup: doc.ref.path };
 		})
 	);
 }
 
-function onGlidesSnapshot(loggedInUser, callback) {
+function onGlidesSnapshot(
+	loggedInUser: { following: unknown },
+	callback: { (newGlides: any): void; (arg0: any[]): void }
+) {
 	const watchCollection = collection(db, 'glides');
 
 	const constraints = [
@@ -42,6 +46,26 @@ function onGlidesSnapshot(loggedInUser, callback) {
 		const glides = await getGlidesFromDocs(querySnapshot);
 		callback(glides);
 	});
+}
+
+async function fetchGlide(uid, id) {
+	const userDocRef = doc(db, 'users', uid);
+	const userGlideRef = doc(userDocRef, 'glides', id);
+
+	const userGlideSnap = await getDoc(userGlideRef);
+	const userGlide = userGlideSnap.data();
+
+	const glideSnap = await getDoc(userGlide.lookup);
+	const userSnap = await getDoc(userDocRef);
+
+	const glide = {
+		...glideSnap.data(),
+		user: userSnap.data(),
+		id: glideSnap.id,
+		lookup: glideSnap.ref.path
+	};
+
+	return glide;
 }
 
 async function fetchGlides(lastDocGlide: GlideProps, loggedInUser: any) {
@@ -85,7 +109,10 @@ async function postGlide(glideData: { message: string; uid: string }) {
 	const glideCollection = collection(db, 'glides');
 	const newGlide = await addDoc(glideCollection, glide);
 
-	return { ...glide, id: newGlide.id };
+	const userGlideRef = doc(userRef, 'glides', newGlide.id);
+	await setDoc(userGlideRef, { lookup: newGlide });
+
+	return { ...glide, id: newGlide.id, lookup: newGlide.path };
 }
 
-export { postGlide, fetchGlides, onGlidesSnapshot };
+export { postGlide, fetchGlides, onGlidesSnapshot, fetchGlide };

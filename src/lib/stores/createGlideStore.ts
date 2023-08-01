@@ -5,11 +5,14 @@ import { writable, get } from 'svelte/store';
 import { v4 as uuid } from 'uuid';
 
 export interface UserProps {
+	uid: any;
 	nickName: string;
 	avatar: string;
 }
 
 export interface GlideProps {
+	uid: any;
+	lookup: any;
 	message: string;
 	id: string;
 	user: UserProps;

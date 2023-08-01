@@ -3,10 +3,10 @@
 	import TiHeartOutline from 'svelte-icons/ti/TiHeartOutline.svelte';
 	import TiMessage from 'svelte-icons/ti/TiMessage.svelte';
 	import TiTrash from 'svelte-icons/ti/TiTrash.svelte';
-	import moment from "moment"
+	import moment from 'moment';
+	import { goto } from '$app/navigation';
 
 	export let glide: GlideProps;
-
 </script>
 
 <div class="p-4 border-b border-gray-700 border-solid flex-it">
@@ -18,11 +18,17 @@
 				<img alt="" class="rounded-full" src={glide.user.avatar} />
 			</div>
 		</div>
-		<article class="flex-grow flex-shrink cursor-pointer flex-it">
+
+		<!-- svelte-ignore a11y-click-events-have-key-events -->
+		<!-- svelte-ignore a11y-no-noninteractive-element-interactions -->
+		<article
+			on:click={() => goto(`/twitter-clone/${glide.uid}/glide/${glide.id}`)}
+			class="flex-grow flex-shrink cursor-pointer flex-it"
+		>
 			<div class="justify-center flex-grow mb-1 flex-it">
 				<div class="flex-row justify-between w-full flex-it">
 					<div>
-						<span class="font-bold">{glide.user.nickName}</span>
+						<span class="font-bold">{glide.user.nickName} </span>
 						<span class="mx-2">&#8226;</span>
 						<span class="text-gray-400">
 							{moment(glide.date.toDate().toISOString()).fromNow()}</span

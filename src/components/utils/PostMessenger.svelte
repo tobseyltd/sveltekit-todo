@@ -6,6 +6,7 @@
 	import { v4 as uuidv4 } from 'uuid';
 
 	export let onSubmitGlide: (data: any) => void;
+	export let showAvatar = true;
 
 	const { auth }: any = getAuthContext();
 	const { addSnackbar } = getUIContext();
@@ -59,13 +60,15 @@
 </script>
 
 <div class="flex-row px-4 py-1 flex-it">
-	<div class="mr-4 flex-it">
-		<div
-			class="w-12 h-12 overflow-visible transition duration-200 cursor-pointer hover:opacity-80"
-		>
-			<img alt="" class="rounded-full" src={$auth?.user?.avatar} />
+	{#if showAvatar}
+		<div class="mr-4 flex-it">
+			<div
+				class="w-12 h-12 overflow-visible transition duration-200 cursor-pointer hover:opacity-80"
+			>
+				<img alt="" class="rounded-full" src={$auth?.user?.avatar} />
+			</div>
 		</div>
-	</div>
+	{/if}
 	<!-- MESSENGER START -->
 	<div class="flex-grow flex-it">
 		<div class="flex-it">
