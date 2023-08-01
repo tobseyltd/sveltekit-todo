@@ -10,10 +10,8 @@
 	import PostMessenger from '@components/utils/PostMessenger.svelte';
 	import { onMount } from 'svelte';
 
-	const { glide, loading, getGlide }: any = createGlideIdStore(
-		$page.params.uid,
-		$page.params.id
-	);
+	const { glide, loading, getGlide, incrementSubglidesCount }: any =
+		createGlideIdStore($page.params.uid, $page.params.id);
 
 	const {
 		pages,
@@ -43,7 +41,9 @@
 		</div>
 		<PostMessenger
 			showAvatar={false}
-			onSubmitGlide={() => {}}
+			onSubmitGlide={() => {
+				incrementSubglidesCount();
+			}}
 			glideLookup={$glide.lookup}
 		/>
 	</div>
