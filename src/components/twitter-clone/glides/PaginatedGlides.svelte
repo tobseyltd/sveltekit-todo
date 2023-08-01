@@ -26,6 +26,12 @@
 {/each}
 {#if loading}
 	<DataLoaderIndicator />
+{:else if glidePages[1].glides.length === 0}
+	<div class="flex-it">
+		<div class="p-4 mx-4 mt-6 bg-yellow-600 rounded-lg">
+			No Glides. Create a new Glide!
+		</div>
+	</div>
 {/if}
 
 <div bind:this={lastItemRef} />

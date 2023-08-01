@@ -3,7 +3,7 @@ import { getUIContext } from '@components/context/UI';
 import { writable, get } from 'svelte/store';
 import { v4 as uuid } from 'uuid';
 
-const key: number | string = '';
+const key = 1;
 
 export function createSubglideGlideStore() {
 	const { addSnackbar } = getUIContext();
@@ -17,7 +17,7 @@ export function createSubglideGlideStore() {
 	async function loadGlides(glideLookup) {
 		const currentPage = get(page);
 
-		if (Number(currentPage) > 1 && !lastGlideDoc) return;
+		if (currentPage > 1 && !lastGlideDoc) return;
 		loading.set(true);
 
 		try {
@@ -28,7 +28,7 @@ export function createSubglideGlideStore() {
 
 			if (glides.length > 0) {
 				pages.update((_pages) => ({ ..._pages, [currentPage]: { glides } }));
-				page.update((p) => Number(p) + 1);
+				page.update((p) => p + 1);
 			}
 
 			lastGlideDoc = _lastGlideDoc;
@@ -51,18 +51,16 @@ export function createSubglideGlideStore() {
 
 	function resetPagination() {
 		pages.update((_pages) => {
-			for (let i = 1; i < Object.keys(_pages).length; i++) {
+			for (let i = 1; i <= Object.keys(_pages).length; i++) {
 				_pages[i] = {
 					glides: []
 				};
-
 			}
 			return _pages;
 		});
 
 		lastGlideDoc = null;
 		page.set(1);
-
 	}
 
 	return {

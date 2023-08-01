@@ -21,7 +21,7 @@ export interface GlideProps {
 	date: string;
 }
 
-const key: number | string = '';
+const key = 1;
 
 export function createGlideStore(loggedInUser: anys) {
 	const { addSnackbar } = getUIContext();
@@ -46,7 +46,7 @@ export function createGlideStore(loggedInUser: anys) {
 	async function loadGlides() {
 		const currentPage = get(page);
 
-		if (Number(currentPage) > 1 && !lastGlideDoc) return;
+		if (currentPage > 1 && !lastGlideDoc) return;
 		loading.set(true);
 
 		try {
@@ -57,7 +57,7 @@ export function createGlideStore(loggedInUser: anys) {
 
 			if (glides.length > 0) {
 				glidePages.update((pages) => ({ ...pages, [currentPage]: { glides } }));
-				page.update((p) => Number(p) + 1);
+				page.update((p) => p + 1);
 			}
 
 			lastGlideDoc = _lastGlideDoc;

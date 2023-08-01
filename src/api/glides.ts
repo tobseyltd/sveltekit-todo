@@ -78,15 +78,21 @@ async function fetchSubglides(lastGlideDoc, glideLookup) {
 
 	const q = query(glidesCollection, ...constraints);
 	const qSnapshot = await getDocs(q);
+
+	const _lastGlideDoc = qSnapshot.docs[qSnapshot.docs.length - 1];
 	const glides = await getGlidesFromDocs(qSnapshot);
+
+	if (lastGlideDoc) {
+		constraints.push(startAfter(lastGlideDoc));
+	}
 
 	return {
 		glides,
-		lastGlide: null
+		lastGlideDoc: _lastGlideDoc
 	};
 }
 
-async function fetchGlides(lastDocGlide: GlideProps, loggedInUser: any) {
+async function fetchGlides(lastGlideDoc: GlideProps, loggedInUser: any) {
 	const _loggedInUSerRef = doc(db, 'users', loggedInUser.uid);
 	const constraints: any = [orderBy('date', 'desc'), limit(10)];
 
@@ -98,18 +104,18 @@ async function fetchGlides(lastDocGlide: GlideProps, loggedInUser: any) {
 		constraints.push(where('user', '==', _loggedInUSerRef));
 	}
 
-	if (lastDocGlide) {
-		constraints.push(startAfter(lastDocGlide));
+	if (lastGlideDoc) {
+		constraints.push(startAfter(lastGlideDoc));
 	}
 
 	const queryData = query(collection(db, 'glides'), ...constraints);
 	const querySnap = await getDocs(queryData);
 
-	const lastGlide = querySnap.docs[querySnap.docs.length - 1];
+	const _lastGlideDoc = querySnap.docs[querySnap.docs.length - 1];
 
 	const glides = await getGlidesFromDocs(querySnap);
 
-	return { glides, lastGlide };
+	return { glides, lastGlideDoc: _lastGlideDoc };
 }
 
 function getGlideCollection(glideLookup) {
