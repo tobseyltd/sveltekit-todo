@@ -3,6 +3,7 @@
 	import { createGlideIdStore } from '$lib/stores/createGlideIdStore';
 	import { createSubglideGlideStore } from '$lib/stores/createSubGlideStore';
 	import { pageStore } from '$lib/stores/pagestore';
+	import { fetchGlide } from '@api/glides';
 	import GlidePost from '@components/twitter-clone/glides/GlidePost.svelte';
 	import PaginatedGlides from '@components/twitter-clone/glides/PaginatedGlides.svelte';
 	import BackButton from '@components/utils/BackButton.svelte';
@@ -11,7 +12,9 @@
 	import { onMount } from 'svelte';
 
 	const { glide, loading, getGlide, incrementSubglidesCount }: any =
-		createGlideIdStore($page.params.uid, $page.params.id);
+		createGlideIdStore(() => {
+			return fetchGlide($page.params.uid, $page.params.id);
+		});
 
 	const {
 		pages,
@@ -22,14 +25,14 @@
 
 	pageStore.title.set(BackButton);
 
+	$: {
+		if ($glide && !$loading && $page.params.id !== $glide.id) getGlide();
+	}
+
 	onMount(async () => {
 		const _glide = await getGlide();
 		loadGlides(_glide.lookup);
 	});
-
-	$: {
-		console.log($pages);
-	}
 </script>
 
 {#if $loading}
