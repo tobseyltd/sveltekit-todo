@@ -17,7 +17,6 @@
 	} = createGlideStore($auth.user);
 
 	pageStore.title.set('Home');
-
 </script>
 
 <PostMessenger onSubmitGlide={addGlide} />

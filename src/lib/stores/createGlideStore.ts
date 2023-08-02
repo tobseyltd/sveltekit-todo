@@ -11,6 +11,7 @@ export interface UserProps {
 }
 
 export interface GlideProps {
+	mediaUrl: any;
 	uid: any;
 	lookup: any;
 	message: string;
@@ -72,10 +73,17 @@ export function createGlideStore(loggedInUser: anys) {
 		}
 	}
 
-	function addGlide(glide: GlideProps) {
-		glidePages.update((pages) => ({
-			[key]: { glides: [glide, ...pages[key].glides] }
-		}));
+	//function addGlide(glide: GlideProps) {
+	//	glidePages.update((pages) => ({
+	//		[key]: { glides: [glide, ...pages[key].glides] }
+	//	}));
+	//}
+
+	function addGlide(glide) {
+		pages.update((_pages) => {
+			_pages[FIRST_PAGE].glides.unshift(glide);
+			return _pages;
+		});
 	}
 
 	function subscribeToNewGlides() {

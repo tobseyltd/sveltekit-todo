@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { postGlide } from '@api/glides';
+	import { postGlide, uploadImage } from '@api/glides';
 	import { getUIContext } from '@components/context/UI';
 	import { getAuthContext } from '@components/context/auth';
 	import TiImageOutline from 'svelte-icons/ti/TiImageOutline.svelte';
@@ -13,6 +13,7 @@
 	const { addSnackbar } = getUIContext();
 
 	let loading = false;
+	let image = { buffer: new ArrayBuffer(0), name: '', previewUrl: '' };
 	let glideContent = { message: '' };
 
 	// Helper Functions ////////////////////////////
@@ -21,10 +22,16 @@
 
 		const glideData = {
 			...glideContent,
-			uid: $auth?.user?.uid
+			uid: $auth?.user?.uid,
+			mediaUrl: ''
 		};
 
 		try {
+			if (image.buffer.byteLength > 0) {
+				const downloadUrl = await uploadImage(image);
+				glideData.mediaUrl = downloadUrl;
+			}
+
 			const glide = await postGlide(glideData, glideLookup);
 
 			const user = {
@@ -40,7 +47,10 @@
 				id: uuidv4()
 			});
 			glideContent.message = '';
+			image = { buffer: new ArrayBuffer(0), name: '', previewUrl: '' };
 		} catch (ERROR: any) {
+			console.log(ERROR.message);
+
 			addSnackbar({
 				message: ERROR.message,
 				type: 'error',
@@ -57,6 +67,24 @@
 
 		const { scrollHeight } = element;
 		element.style.height = scrollHeight + 'px';
+	}
+
+	function handleImageSelection(EVENT: any) {
+		const file = EVENT.target.files[0];
+		const reader = new FileReader();
+
+		reader.readAsArrayBuffer(file);
+
+		reader.onload = () => {
+			const buffer: any = reader.result;
+			const bufferUint8 = new Uint8Array(buffer);
+
+			const blob = new Blob([bufferUint8], { type: file.type });
+			const urlCreator = window.URL || window.webkitURL;
+			const imageUrl = urlCreator.createObjectURL(blob);
+
+			image = { buffer, name: file.name, previewUrl: imageUrl };
+		};
 	}
 </script>
 
@@ -83,6 +111,11 @@
 				placeholder={"What's new?"}
 			/>
 		</div>
+		{#if image.previewUrl.length > 0}
+			<div class="p-4 flex-it max-w-52">
+				<img src={image.previewUrl} alt="" />
+			</div>
+		{/if}
 		<div class="flex-row items-center justify-between mb-1 flex-it">
 			<div
 				class="mt-3 mr-3 text-white transition cursor-pointer flex-it hover:text-blue-400"
@@ -91,7 +124,7 @@
 					<div class="icon">
 						<TiImageOutline />
 					</div>
-					<input type="file" name="myfile" />
+					<input on:change={handleImageSelection} type="file" name="myfile" />
 				</div>
 			</div>
 			<div class="w-32 mt-3 cursor-pointer flex-it">

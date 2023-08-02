@@ -17,6 +17,7 @@ import {
 	updateDoc,
 	increment
 } from 'firebase/firestore';
+import { getStorage, ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 
 async function getGlidesFromDocs(qSnapshot: any) {
 	return await Promise.all(
@@ -29,6 +30,15 @@ async function getGlidesFromDocs(qSnapshot: any) {
 			return { ...glide, id: doc.id, lookup: doc.ref.path };
 		})
 	);
+}
+
+async function uploadImage(image) {
+	const storage = getStorage();
+	const storageRef = ref(storage, image.name);
+
+	const uploadResult = await uploadBytes(storageRef, image.buffer);
+	const downloadUrl = await getDownloadURL(uploadResult.ref);
+	return downloadUrl;
 }
 
 function onGlidesSnapshot(
@@ -162,4 +172,11 @@ async function postGlide(
 	return { ...glide, id: newGlide.id, lookup: newGlide.path };
 }
 
-export { postGlide, fetchGlides, onGlidesSnapshot, fetchGlide, fetchSubglides };
+export {
+	postGlide,
+	fetchGlides,
+	onGlidesSnapshot,
+	fetchGlide,
+	fetchSubglides,
+	uploadImage
+};

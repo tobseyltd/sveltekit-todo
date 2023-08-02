@@ -12,23 +12,25 @@ export function createSubglideGlideStore() {
 	const page = writable(key);
 	const loading = writable(false);
 
-	let lastGlideDoc: any;
+	let lastGlideDoc = null;
 
 	async function loadGlides(glideLookup) {
-		const currentPage = get(page);
+		const _page = get(page);
 
-		if (currentPage > 1 && !lastGlideDoc) return;
+		if (typeof lastGlideDoc === 'undefined') {
+			return;
+		}
+
 		loading.set(true);
-
 		try {
-			const { glides, lastGlideDoc: _lastGlideDoc }: any = await fetchSubglides(
+			const { glides, lastGlideDoc: _lastGlideDoc } = await fetchSubglides(
 				lastGlideDoc,
 				glideLookup
 			);
 
 			if (glides.length > 0) {
-				pages.update((_pages) => ({ ..._pages, [currentPage]: { glides } }));
-				page.update((p) => p + 1);
+				pages.update((_pages) => ({ ..._pages, [_page]: { glides } }));
+				page.update((_page) => _page + 1);
 			}
 
 			lastGlideDoc = _lastGlideDoc;

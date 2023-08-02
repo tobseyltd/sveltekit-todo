@@ -46,6 +46,11 @@
 			<div class="flex-row items-center flex-grow-0 mb-2 flex-it">
 				<div class="w-full mb-3 mr-3 flex-it">{glide.message}</div>
 			</div>
+			{#if glide?.mediaUrl}
+				<div class="pb-6 flex-it max-w-64">
+					<img src={glide.mediaUrl} alt="" />
+				</div>
+			{/if}
 			<div class="flex-row flex-grow text-gray-400 flex-it">
 				<div
 					class="flex-row items-center mr-5 transition cursor-pointer flex-it hover:text-blue-400"
